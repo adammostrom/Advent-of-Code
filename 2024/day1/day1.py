@@ -1,17 +1,13 @@
 ## DAY 1
 
-# Initialize lists for each column
 list1 = []
 list2 = []
 
 
 def readFile():
-# Open and read the file line by line
     with open('puzzleInput.txt', 'r') as file:
         for line in file:
-            # Split the line into two numbers
             num1, num2 = map(int, line.split())
-            # Append each number to the corresponding list
             list1.append(num1)
             list2.append(num2)
 
