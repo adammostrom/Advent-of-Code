@@ -1,4 +1,7 @@
+module Day2 where 
 
+
+import System.IO(readFile)
 
 -- level = 75 77 80 78 80 83 84 87
 
@@ -24,7 +27,12 @@ testB = [1, 2, 7, 8, 9]
 
 
 decreasing :: [Int] -> Bool
-decreasing (x:y:xs) = x >= y && decreasing xs
+decreasing [] = True
+decreasing [x] = True
+decreasing (x:y:xs)
+    | x >= y && decreasing (y:xs) = True
+    | otherwise                   = False
+
 
 increasing :: [Int] -> Bool
 increasing [] = True
@@ -42,3 +50,23 @@ diff x y =
         diff' x y  
             | x - y <= 3 && x - y > 0 = True
             | otherwise               = False
+
+
+level :: [Int] -> Bool 
+level [x] = True
+level (x:y:xs) 
+    | increasing (x:y:xs) && diff x y && level (y:xs) = True 
+    | decreasing (x:y:xs) && diff x y && level (y:xs) = True
+    | otherwise                                       = False
+
+
+readNumbersFile :: FilePath -> IO [[Int]]
+readNumbersFile filePath = do
+    contents <- readFile filePath
+    let numberLists = map (map read . words) (lines contents)
+    return numberLists
+
+main :: IO ()
+main = do
+    numbers <- readNumbersFile "input.txt"
+    print $ length $ filter id (map level numbers)
